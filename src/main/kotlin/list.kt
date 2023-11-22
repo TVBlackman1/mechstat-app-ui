@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ fun ListComponent(data: ArrayList<ListResponse>) {
             material = "материал",
             experimentType = "тип",
             responsible = "ответственный",
+            style = ListRowStyle.HEADER,
         )
         LazyColumn {
             items(data) {
@@ -55,6 +57,34 @@ fun ListComponentPreview() {
     ListComponent(data)
 }
 
+@Composable
+fun ListRow(
+    number: String,
+    material: String,
+    experimentType: String,
+    responsible: String,
+    style: ListRowStyle = ListRowStyle.BODY,
+) {
+    val shape = RoundedCornerShape(4.dp)
+    val color = color(style)
+    Row (
+        modifier = listModifier()
+            .padding(style)
+            .background(
+                color = Color(color),
+                shape = shape
+            )
+            .padding(5.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceAround,
+    ){
+        NumberListElement(number, style)
+        MaterialListElement(material, style)
+        ExperimentTypeListElement(experimentType, style)
+        ResponsibleListElement(responsible, style)
+    }
+}
+
 fun listModifier(): Modifier {
     val summaryWidth = ListElementSizes.summaryWidth()
     val defaultWidth = 350.dp
@@ -62,29 +92,21 @@ fun listModifier(): Modifier {
     return Modifier.width(width)
 }
 
-@Composable
-fun ListRow(
-    number: String,
-    material: String,
-    experimentType: String,
-    responsible: String
-) {
-    val shape = RoundedCornerShape(4.dp)
-    Row (
-        modifier = listModifier()
-            .padding(4.dp).background(
-                color = Color(0xFFF1F8F8),
-                shape = shape
-            )
-            .height(30.dp)
-            .padding(5.dp),
-
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceAround
-    ){
-        NumberListElement(number)
-        MaterialListElement(material)
-        ExperimentTypeListElement(experimentType)
-        ResponsibleListElement(responsible)
+fun color(style: ListRowStyle): Long {
+    return when(style) {
+        ListRowStyle.HEADER -> 0xFFf4f4f7
+        ListRowStyle.BODY -> 0xFFF1F8F8
     }
+}
+
+fun Modifier.padding(style: ListRowStyle): Modifier {
+    return when(style) {
+        ListRowStyle.HEADER -> Modifier.height(36.dp).padding(4.dp)
+        ListRowStyle.BODY -> Modifier.height(40.dp).padding(4.dp)
+    }
+}
+
+enum class ListRowStyle {
+    HEADER,
+    BODY,
 }

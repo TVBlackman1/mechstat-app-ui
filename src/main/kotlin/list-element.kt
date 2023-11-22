@@ -7,20 +7,18 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 
 @Composable
-fun ListElement(width: Dp, body: String) {
+fun ListElement(width: Dp, body: String, style: ListRowStyle) {
     Text(
         modifier = Modifier.width(width),
         textAlign = TextAlign.Start,
         text = body,
-        style = TextStyle(
-            color = Color(0xFF2C3E50),
-            fontFamily = interFont400
-        )
+        style = styleText(style)
     )
 }
-
 
 val symbolSize = 10.dp
 
@@ -35,14 +33,38 @@ object ListElementSizes {
         return Number + Material + ExperimentType + Responsible + paddingSize * elementsCount
     }
 }
+//fun a() {}
 @Composable
-fun NumberListElement(body: String) = ListElement(width = ListElementSizes.Number, body = body)
+fun NumberListElement(body: String, style: ListRowStyle) = ListElement(
+    width = ListElementSizes.Number, body = body, style = style
+)
 
 @Composable
-fun MaterialListElement(body: String) = ListElement(width = ListElementSizes.Material, body = body)
+fun MaterialListElement(body: String, style: ListRowStyle) = ListElement(
+    width = ListElementSizes.Material, body = body, style = style
+)
 
 @Composable
-fun ExperimentTypeListElement(body: String) = ListElement(width = ListElementSizes.ExperimentType, body = body)
+fun ExperimentTypeListElement(body: String, style: ListRowStyle) = ListElement(
+    width = ListElementSizes.ExperimentType, body = body, style = style
+)
 
 @Composable
-fun ResponsibleListElement(body: String) = ListElement(width = ListElementSizes.Responsible, body = body)
+fun ResponsibleListElement(body: String, style: ListRowStyle) = ListElement(
+    width = ListElementSizes.Responsible, body = body, style = style
+)
+
+fun styleText(style: ListRowStyle): TextStyle {
+    return when(style) {
+        ListRowStyle.HEADER -> TextStyle(
+            color = Color(0xFF2C3E50),
+            fontFamily = interFont400,
+            fontSize = 14.sp,
+        )
+        ListRowStyle.BODY -> TextStyle(
+            color = Color(0xFF2C3E50),
+            fontFamily = interFont400,
+            fontSize = 15.sp,
+        )
+    }
+}
