@@ -28,12 +28,6 @@ suspend fun getData(): ArrayList<ListResponse> = withContext(Dispatchers.IO){
     val client = HttpClient(CIO)
     client.use {
         val resp = it.get<HttpResponse>(ApiRoutes.EXPERIMENTS)
-        println(resp.request.url)
-        println(resp.status)
-        println(resp.readText())
-
-        val data = Json.decodeFromString<ArrayList<ListResponse>>(resp.readText())
-        println(data[0].material)
-        return@withContext data
+        Json.decodeFromString<ArrayList<ListResponse>>(resp.readText())
     }
 }
