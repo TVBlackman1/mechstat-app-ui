@@ -12,54 +12,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 
-
-fun listModifier(): Modifier {
-    val summaryWidth = ListElementSizes.summaryWidth()
-    val defaultWidth = 350.dp
-    val width = max(defaultWidth, summaryWidth)
-    return Modifier.width(width)
-}
 @Composable
 fun ListComponent(data: ArrayList<ListResponse>) {
-    val shape = RoundedCornerShape(4.dp)
     Column {
-        Row (
-            modifier = listModifier()
-                .padding(4.dp).border(0.dp, Color.Black, shape).background(
-                    color = Color(0xFFF1F8F8),
-                    shape = shape
-                )
-                .height(30.dp)
-                .padding(5.dp),
-
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround
-        ){
-            NumberListElement("номер")
-            MaterialListElement("материал")
-            ExperimentTypeListElement("тип")
-            ResponsibleListElement("ответственный")
-        }
+        ListRow(
+            number = "номер",
+            material = "материал",
+            experimentType = "тип",
+            responsible = "ответственный",
+        )
         LazyColumn {
             items(data) {
-
-                Row (modifier = listModifier()
-                    .padding(4.dp).border(0.dp, Color.Black, shape).background(
-                        color = Color(0xFFF1F8F8),
-                        shape = shape
-                    )
-                    .height(30.dp)
-                    .padding(5.dp),
-
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceAround
-                ) {
-
-                    NumberListElement(it.number.toString())
-                    MaterialListElement(it.material)
-                    ExperimentTypeListElement(it.experimentType)
-                    ResponsibleListElement(it.responsible)
-                }
+                ListRow(
+                    number = it.number.toString(),
+                    material = it.material,
+                    experimentType = it.experimentType,
+                    responsible = it.responsible,
+                )
             }
         }
     }
@@ -84,4 +53,38 @@ fun ListComponentPreview() {
         ),
     )
     ListComponent(data)
+}
+
+fun listModifier(): Modifier {
+    val summaryWidth = ListElementSizes.summaryWidth()
+    val defaultWidth = 350.dp
+    val width = max(defaultWidth, summaryWidth)
+    return Modifier.width(width)
+}
+
+@Composable
+fun ListRow(
+    number: String,
+    material: String,
+    experimentType: String,
+    responsible: String
+) {
+    val shape = RoundedCornerShape(4.dp)
+    Row (
+        modifier = listModifier()
+            .padding(4.dp).background(
+                color = Color(0xFFF1F8F8),
+                shape = shape
+            )
+            .height(30.dp)
+            .padding(5.dp),
+
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceAround
+    ){
+        NumberListElement(number)
+        MaterialListElement(material)
+        ExperimentTypeListElement(experimentType)
+        ResponsibleListElement(responsible)
+    }
 }

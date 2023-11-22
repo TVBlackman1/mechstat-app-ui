@@ -2,6 +2,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -11,9 +13,14 @@ fun ListElement(width: Dp, body: String) {
     Text(
         modifier = Modifier.width(width),
         textAlign = TextAlign.Start,
-        text = body
+        text = body,
+        style = TextStyle(
+            color = Color(0xFF2C3E50),
+            fontFamily = interFont400
+        )
     )
 }
+
 
 val symbolSize = 10.dp
 
