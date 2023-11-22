@@ -5,20 +5,26 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 
+
+fun listModifier(): Modifier {
+    val summaryWidth = ListElementSizes.summaryWidth()
+    val defaultWidth = 350.dp
+    val width = max(defaultWidth, summaryWidth)
+    return Modifier.width(width)
+}
 @Composable
 fun ListComponent(data: ArrayList<ListResponse>) {
     val shape = RoundedCornerShape(4.dp)
     Column {
         Row (
-            modifier = Modifier
-                .width(400.dp)
+            modifier = listModifier()
                 .padding(4.dp).border(0.dp, Color.Black, shape).background(
                     color = Color(0xFFF1F8F8),
                     shape = shape
@@ -37,8 +43,7 @@ fun ListComponent(data: ArrayList<ListResponse>) {
         LazyColumn {
             items(data) {
 
-                Row (modifier = Modifier
-                    .width(400.dp)
+                Row (modifier = listModifier()
                     .padding(4.dp).border(0.dp, Color.Black, shape).background(
                         color = Color(0xFFF1F8F8),
                         shape = shape
