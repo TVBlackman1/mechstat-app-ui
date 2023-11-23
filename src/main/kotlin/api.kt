@@ -24,10 +24,14 @@ data class ListResponse(
     val material: String = "",
 )
 
-suspend fun getData(): ArrayList<ListResponse> = withContext(Dispatchers.IO){
+suspend fun getData(page: Int): ArrayList<ListResponse> = withContext(Dispatchers.IO){
     val client = HttpClient(CIO)
     client.use {
-        val resp = it.get<HttpResponse>(ApiRoutes.EXPERIMENTS)
+        val resp = it.get<HttpResponse> {
+            url(ApiRoutes.EXPERIMENTS)
+            parameter("page", page.toString())
+            parameter("limit", 12)
+        }
         Json.decodeFromString<ArrayList<ListResponse>>(resp.readText())
     }
 }

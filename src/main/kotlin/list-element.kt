@@ -7,7 +7,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 
 @Composable
@@ -33,7 +32,7 @@ object ListElementSizes {
         return Number + Material + ExperimentType + Responsible + paddingSize * elementsCount
     }
 }
-//fun a() {}
+
 @Composable
 fun NumberListElement(body: String, style: ListRowStyle) = ListElement(
     width = ListElementSizes.Number, body = body, style = style
