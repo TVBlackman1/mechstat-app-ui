@@ -19,7 +19,7 @@ fun App() {
     Scaffold {
         MaterialTheme {
             Row {
-                LeftSide(getButtons(), contentType, pickContentType)
+                LeftSide(getLeftSideContent(), contentType, pickContentType)
                 Content(contentType)
             }
         }
