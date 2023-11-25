@@ -1,16 +1,23 @@
-import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.background
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.NavigationRail
 import androidx.compose.material.NavigationRailItem
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.ripple.LocalRippleTheme
+import androidx.compose.material.ripple.RippleAlpha
+import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 
 data class Button(
     val text: String,
@@ -19,33 +26,57 @@ data class Button(
     val contentType: ContentType
 )
 
-data class LeftSideContent(
+class LeftSideContent(
     val top: Array<Button>,
     val bottom: Array<Button>,
 )
 
 typealias onContentType = (type: ContentType) -> Unit
 
+inline fun isSelected(button: Button, contentType: ContentType): Boolean =
+    button.contentType == contentType
+
 @Composable
 fun LeftSide(content: LeftSideContent, contentType: ContentType,
              pick: onContentType) {
+
+    val selectedBackgroundShape = RoundedCornerShape(4.dp)
     val displayButton: @Composable (Button)->Unit = {
+        val interactionSource = remember { MutableInteractionSource() }
+        val isHovered by interactionSource.collectIsHoveredAsState()
         NavigationRailItem(
-            icon = { Icon(it.icon, it.desc) },
+            modifier = Modifier.hoverable(interactionSource),
+            icon = {
+                Icon(it.icon, it.desc, modifier =
+                if (isSelected(it, contentType))
+                    Modifier.background(Color(0xFFDCDCDC), selectedBackgroundShape)
+                else if (isHovered)
+                    Modifier.background(Color(0xFFEBEBEB), selectedBackgroundShape)
+                else
+                    Modifier.background(Color(0x00000000), selectedBackgroundShape)
+                )
+                   },
             label = { Text(it.text) },
-            selected = it.contentType == contentType,
+            selected = isSelected(it, contentType),
+            unselectedContentColor = Color(0xFF2C3E50),
+            selectedContentColor = Color(0xFF2C3E50),
             onClick = {
                 pick(it.contentType)
             }
         )
     }
-    NavigationRail {
-        for (button in content.top) {
-            displayButton(button)
-        }
-        Spacer(modifier = Modifier.weight(1.0f))
-        for (button in content.bottom) {
-            displayButton(button)
+    CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
+        NavigationRail(modifier = Modifier
+            .background(Color(0xFFF8F6F4)).width(54.dp),
+            elevation = 0.dp,
+        ) {
+            for (button in content.top) {
+                displayButton(button)
+            }
+            Spacer(modifier = Modifier.weight(1.0f))
+            for (button in content.bottom) {
+                displayButton(button)
+            }
         }
     }
 }
@@ -75,4 +106,12 @@ fun getLeftSideContent(): LeftSideContent {
             ),
         ),
     )
+}
+
+private object NoRippleTheme : RippleTheme {
+    @Composable
+    override fun defaultColor() = Color.Unspecified
+
+    @Composable
+    override fun rippleAlpha(): RippleAlpha = RippleAlpha(0.0f,0.0f,0.0f,0.0f)
 }

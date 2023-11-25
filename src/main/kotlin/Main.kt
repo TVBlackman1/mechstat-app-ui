@@ -1,7 +1,10 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -16,11 +19,19 @@ fun App() {
     val pickContentType: onContentType = {
         _contentType -> contentType = _contentType
     }
-    Scaffold {
+    Box {
+
+    }
+    Scaffold() {
         MaterialTheme {
-            Row {
-                LeftSide(getLeftSideContent(), contentType, pickContentType)
-                Content(contentType)
+            Box(modifier = Modifier
+                .background(Color(0xFFF5F1EC))
+                .fillMaxSize()
+            ) {
+                Row {
+                    LeftSide(getLeftSideContent(), contentType, pickContentType)
+                    Content(contentType)
+                }
             }
         }
     }
