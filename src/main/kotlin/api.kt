@@ -30,7 +30,7 @@ suspend fun getData(page: Int): ArrayList<ListResponse> = withContext(Dispatcher
         val resp = it.get<HttpResponse> {
             url(ApiRoutes.EXPERIMENTS)
             parameter("page", page.toString())
-            parameter("limit", 12)
+            parameter("limit", 16)
         }
         Json.decodeFromString<ArrayList<ListResponse>>(resp.readText())
     }

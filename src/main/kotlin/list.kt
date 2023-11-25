@@ -85,7 +85,7 @@ fun ListRow(
 
 fun listModifier(): Modifier {
     val summaryWidth = ListElementSizes.summaryWidth()
-    val defaultWidth = 350.dp
+    val defaultWidth = 580.dp
     val width = max(defaultWidth, summaryWidth)
     return Modifier.width(width)
 }

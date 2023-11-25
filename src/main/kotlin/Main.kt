@@ -19,9 +19,7 @@ fun App() {
     val pickContentType: onContentType = {
         _contentType -> contentType = _contentType
     }
-    Box {
-
-    }
+    
     Scaffold() {
         MaterialTheme {
             Box(modifier = Modifier
