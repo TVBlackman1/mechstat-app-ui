@@ -9,20 +9,19 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
+import repository.experiments.ListResponse
+import repository.repository
 
 @Composable
 fun ListContent() {
-    val density = LocalDensity.current
-
     var page by remember { mutableStateOf(1) }
     var experiments by remember {
         mutableStateOf<ArrayList<ListResponse>>(ArrayList())
     }
     LaunchedEffect(page) {
-        experiments = getData(page)
+        experiments = repository.experiments.getExperiments(page, 16)
     }
     val summaryWidth = ListElementSizes.summaryWidth()
     val defaultWidth = 580.dp
