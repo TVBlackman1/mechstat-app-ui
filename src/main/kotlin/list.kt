@@ -67,7 +67,7 @@ fun ListRow(
     val shape = RoundedCornerShape(4.dp)
     val color = color(style)
     Row (
-        modifier = listModifier()
+        modifier = Modifier.fillMaxWidth()
             .padding(style)
             .background(
                 color = Color(color),
@@ -84,13 +84,6 @@ fun ListRow(
     }
 }
 
-fun listModifier(): Modifier {
-    val summaryWidth = ListElementSizes.summaryWidth()
-    val defaultWidth = 580.dp
-    val width = max(defaultWidth, summaryWidth)
-    return Modifier.width(width)
-}
-
 fun color(style: ListRowStyle): Long {
     return when(style) {
         ListRowStyle.HEADER -> 0xFFf4f4f7
@@ -100,8 +93,8 @@ fun color(style: ListRowStyle): Long {
 
 fun Modifier.padding(style: ListRowStyle): Modifier {
     return when(style) {
-        ListRowStyle.HEADER -> Modifier.height(36.dp).padding(4.dp)
-        ListRowStyle.BODY -> Modifier.height(40.dp).padding(4.dp)
+        ListRowStyle.HEADER -> this.height(36.dp).padding(4.dp)
+        ListRowStyle.BODY -> this.height(40.dp).padding(4.dp)
     }
 }
 

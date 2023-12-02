@@ -24,7 +24,7 @@ fun ListContent() {
         experiments = repository.experiments.getExperiments(page, 16)
     }
     val summaryWidth = ListElementSizes.summaryWidth()
-    val defaultWidth = 580.dp
+    val defaultWidth = 640.dp
     val columnWidth = max(defaultWidth, summaryWidth)
     val shape = RoundedCornerShape(0.dp)
 
@@ -34,9 +34,7 @@ fun ListContent() {
             .height(740.dp)
             .padding(start = 4.dp, top = 4.dp)
             .background(Color.White, shape)
-            .padding(top = 4.dp, start = 6.dp, bottom = 4.dp, end = 6.dp)
-
-        ,
+            .padding(top = 4.dp, start = 6.dp, bottom = 4.dp, end = 6.dp),
     ) {
         ListComponent(experiments)
         Row(
