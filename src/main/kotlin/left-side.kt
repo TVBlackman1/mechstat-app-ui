@@ -33,7 +33,7 @@ class LeftSideContent(
 
 typealias onContentType = (type: ContentType) -> Unit
 
-inline fun isSelected(button: Button, contentType: ContentType): Boolean =
+fun isSelected(button: Button, contentType: ContentType): Boolean =
     button.contentType == contentType
 
 @Composable

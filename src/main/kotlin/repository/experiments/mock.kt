@@ -3,7 +3,6 @@ package repository.experiments
 import repository.ExperimentsRequester
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlin.math.exp
 
 val experimentsMock = generateMockData()
 class ExperimentsMock: ExperimentsRequester {

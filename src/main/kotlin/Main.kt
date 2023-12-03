@@ -17,10 +17,10 @@ fun App() {
     var contentType by remember { mutableStateOf(ContentType.LIST) }
 
     val pickContentType: onContentType = {
-        _contentType -> contentType = _contentType
+        newContentType -> contentType = newContentType
     }
     
-    Scaffold() {
+    Scaffold {
         MaterialTheme {
             Box(modifier = Modifier
                 .background(Color(0xFFF5F1EC))
