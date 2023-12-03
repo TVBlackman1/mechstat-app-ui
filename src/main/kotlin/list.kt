@@ -4,17 +4,42 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import repository.experiments.ListResponse
 
 @Composable
-fun ListComponent(data: ArrayList<ListResponse>) {
-    Column {
+fun ListComponent(data: ArrayList<ListResponse>, columnModifier: Modifier) {
+    val content: @Composable ()->Unit = {
+        if (data.size == 0) {
+            Row {
+                Icon(
+                    Icons.Default.Warning, "no data",
+                    tint = Color(0xFFDCDCDC),
+                    modifier = Modifier.size(size = 64.dp),
+                )
+            }
+        } else {
+            LazyColumn {
+                items(data) {
+                    ListRow(
+                        number = it.number.toString(),
+                        material = it.material,
+                        experimentType = it.experimentType,
+                        responsible = it.responsible,
+                    )
+                }
+            }
+        }
+    }
+
+    Column (modifier = columnModifier) {
         ListRow(
             number = "номер",
             material = "материал",
@@ -22,15 +47,14 @@ fun ListComponent(data: ArrayList<ListResponse>) {
             responsible = "ответственный",
             style = ListRowStyle.HEADER,
         )
-        LazyColumn {
-            items(data) {
-                ListRow(
-                    number = it.number.toString(),
-                    material = it.material,
-                    experimentType = it.experimentType,
-                    responsible = it.responsible,
-                )
-            }
+
+        when (data.size) {
+            0 -> Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) { content() }
+            else -> Column { content() }
         }
     }
 }
@@ -53,7 +77,7 @@ fun ListComponentPreview() {
             experimentType = "сжатие"
         ),
     )
-    ListComponent(data)
+    ListComponent(data, Modifier.height(300.dp))
 }
 
 @Composable

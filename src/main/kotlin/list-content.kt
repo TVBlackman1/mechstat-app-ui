@@ -36,7 +36,7 @@ fun ListContent() {
             .background(Color.White, shape)
             .padding(top = 4.dp, start = 6.dp, bottom = 4.dp, end = 6.dp),
     ) {
-        ListComponent(experiments)
+        ListComponent(experiments, Modifier.weight(1f))
         Row(
             modifier = Modifier.width(columnWidth),
             horizontalArrangement = Arrangement.End,
