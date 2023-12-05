@@ -3,6 +3,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -15,7 +16,7 @@ import repository.experiments.ListResponse
 import repository.repository
 
 @Composable
-fun ListContent() {
+fun ListContent(modifier: Modifier) {
     var page by remember { mutableStateOf(1) }
     var experiments by remember {
         mutableStateOf<ArrayList<ListResponse>>(ArrayList())
@@ -28,32 +29,42 @@ fun ListContent() {
     val columnWidth = max(defaultWidth, summaryWidth)
     val shape = RoundedCornerShape(0.dp)
 
-    Column(
-        modifier = Modifier
-            .width(columnWidth)
-            .height(740.dp)
-            .padding(start = 4.dp, top = 4.dp)
-            .background(Color.White, shape)
-            .padding(top = 4.dp, start = 6.dp, bottom = 4.dp, end = 6.dp),
-    ) {
-        ListComponent(experiments, Modifier.weight(1f))
-        Row(
-            modifier = Modifier.width(columnWidth),
-            horizontalArrangement = Arrangement.End,
+    Row (modifier = modifier){
+        Column(
+            modifier = Modifier
+                .width(columnWidth)
+                .height(740.dp)
+                .background(Color.White, shape)
+                .padding(top = 4.dp, start = 6.dp, bottom = 4.dp, end = 6.dp),
         ) {
-            IconButton(
-                content = {Icon(Icons.Default.KeyboardArrowLeft, "left")},
-                onClick = {
-                    page--
-                },
-                enabled = page != 1
-            )
-            IconButton(
-                content = {Icon(Icons.Default.KeyboardArrowRight, "right")},
-                onClick = {
-                    page++
-                },
-            )
+            ListComponent(experiments, Modifier.weight(1f))
+            Row(
+                modifier = Modifier.width(columnWidth),
+                horizontalArrangement = Arrangement.End,
+            ) {
+                IconButton(
+                    content = {Icon(Icons.Default.KeyboardArrowLeft, "left")},
+                    onClick = {
+                        page--
+                    },
+                    enabled = page != 1
+                )
+                IconButton(
+                    content = {Icon(Icons.Default.KeyboardArrowRight, "right")},
+                    onClick = {
+                        page++
+                    },
+                )
+            }
+        }
+
+        Column (modifier = Modifier
+            .weight(1f)
+            .fillMaxHeight()
+            .padding(start = 3.dp)
+            .background(Color.White, shape)
+        ) {
+            Text("content")
         }
     }
 }

@@ -99,7 +99,7 @@ fun getLeftSideContent(): LeftSideContent {
         ),
         bottom = arrayOf(
             Button(
-                text = "settings",
+                text = "debug",
                 icon = Icons.Default.Settings,
                 desc= "Debug settings",
                 contentType = ContentType.SETTINGS,
