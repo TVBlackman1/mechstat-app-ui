@@ -48,12 +48,12 @@ fun ListContent(modifier: Modifier) {
                     }
                 }
             }
-            SubSection(Height(100)) {
+            SubSection(MaxHeight()) {
                 Text("Other info")
             }
         }
-        Section(Width(1160)) {
-            SubSection(Height(100)) {
+        Section(MaxWidth()) {
+            SubSection(MaxHeight()) {
                 Text("content")
             }
         }
