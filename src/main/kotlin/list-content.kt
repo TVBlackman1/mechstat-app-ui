@@ -52,7 +52,7 @@ fun ListContent(modifier: Modifier) {
                 Text("Other info")
             }
         }
-        Section(MaxWidth()) {
+        Section(Width(1160)) {
             SubSection(Height(100)) {
                 Text("content")
             }

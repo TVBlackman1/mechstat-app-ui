@@ -30,8 +30,8 @@ fun SubSection(heightRule: SubSectionHeight, child: @Composable () -> Unit) {
     Row (
         modifier =  heightRule.perform(Modifier
             .fillMaxWidth()
+            .padding(top = 2.dp, bottom = 2.dp)
             .background(Color.White, shape)
-            .padding(start = 6.dp, end = 6.dp)
         )
     ) { child() }
 }

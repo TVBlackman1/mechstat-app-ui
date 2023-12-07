@@ -33,6 +33,7 @@ fun Section(widthRule: SectionWidth, child: @Composable () -> Unit) {
         modifier = widthRule.perform(
             Modifier
                 .padding(top = 4.dp, bottom = 4.dp)
+                .padding(start = 2.dp, end = 2.dp)
                 .fillMaxHeight()
         )
     ) { child() }
