@@ -31,7 +31,7 @@ fun App() {
                     LeftSide(getLeftSideContent(), contentType, pickContentType)
                     Content(contentType, Modifier
                         .weight(1f)
-                        .padding(4.dp)
+                        .padding(start = 4.dp, top = 2.dp, bottom = 2.dp, end = 4.dp)
                     )
                 }
             }
