@@ -1,8 +1,10 @@
 package internal
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 abstract class SectionWidth() {
@@ -32,7 +34,8 @@ fun Section(widthRule: SectionWidth, child: @Composable () -> Unit) {
     Column(
         modifier = widthRule.perform(
             Modifier
-                .padding(top = 4.dp, bottom = 4.dp)
+                .padding(top = 2.dp, bottom = 2.dp)
+                .background(Color.Transparent)
                 .padding(start = 2.dp, end = 2.dp)
                 .fillMaxHeight()
         )
