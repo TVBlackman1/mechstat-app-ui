@@ -23,12 +23,6 @@ class MaxWidth: SectionWidth() {
     }
 }
 
-// TODO try to create this
-//class RemainWidth(part: Float): SectionWidth() {
-//    override fun perform(modifier: Modifier): Modifier {
-//        return modifier.weight(part)
-//    }
-//}
 @Composable
 fun Section(widthRule: SectionWidth, child: @Composable () -> Unit) {
     Column(

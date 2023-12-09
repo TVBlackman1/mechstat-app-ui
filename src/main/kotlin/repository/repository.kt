@@ -16,5 +16,5 @@ class Repository(
         if(type == RepositoryType.WITH_SERVER) Experiments() else ExperimentsMock()
 )
 interface ExperimentsRequester {
-    suspend fun getExperiments(page: Int, limit: Int): ArrayList<ListResponse>
+    suspend fun getExperiments(page: Int, limit: Int): ListResponse
 }

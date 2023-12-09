@@ -16,7 +16,7 @@ import repository.repository
 fun ListContent(modifier: Modifier) {
     var page by remember { mutableStateOf(1) }
     var experiments by remember {
-        mutableStateOf<ArrayList<ListResponse>>(ArrayList())
+        mutableStateOf<ListResponse?>(null)
     }
     LaunchedEffect(page) {
         experiments = repository.experiments.getExperiments(page, 16)
@@ -27,7 +27,7 @@ fun ListContent(modifier: Modifier) {
         Section(Width(columnWidth)) {
             SubSection(Height(740)) {
                 Column {
-                    ListComponent(experiments, Modifier.weight(1f))
+                    ListComponent(experiments?.data, Modifier.weight(1f))
                     Row(
                         modifier = Modifier.width(columnWidth.dp),
                         horizontalArrangement = Arrangement.End,
@@ -44,6 +44,7 @@ fun ListContent(modifier: Modifier) {
                             onClick = {
                                 page++
                             },
+                            enabled = experiments != null && experiments!!.meta.allPages != page
                         )
                     }
                 }

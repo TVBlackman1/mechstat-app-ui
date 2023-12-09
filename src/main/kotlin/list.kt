@@ -12,31 +12,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import repository.experiments.ListResponse
+import repository.experiments.ListItem
 
 @Composable
-fun ListComponent(data: ArrayList<ListResponse>, columnModifier: Modifier) {
+fun ListComponent(data: ArrayList<ListItem>?, columnModifier: Modifier) {
     val content: @Composable ()->Unit = {
-        if (data.size == 0) {
-            Row {
-                Icon(
-                    Icons.Default.Warning, "no data",
-                    tint = Color(0xFFDCDCDC),
-                    modifier = Modifier.size(size = 64.dp),
-                )
-            }
-        } else {
-            LazyColumn {
-                items(data) {
-                    ListRow(
-                        number = it.number.toString(),
-                        material = it.material,
-                        experimentType = it.experimentType,
-                        responsible = it.responsible,
+            if (data!!.size == 0) {
+                Row {
+                    Icon(
+                        Icons.Default.Warning, "no data",
+                        tint = Color(0xFFDCDCDC),
+                        modifier = Modifier.size(size = 64.dp),
                     )
                 }
+            } else {
+                LazyColumn {
+                    items(data) {
+                        ListRow(
+                            number = it.number.toString(),
+                            material = it.material,
+                            experimentType = it.experimentType,
+                            responsible = it.responsible,
+                        )
+                    }
+                }
             }
-        }
     }
 
     Column (modifier = columnModifier) {
@@ -48,13 +48,15 @@ fun ListComponent(data: ArrayList<ListResponse>, columnModifier: Modifier) {
             style = ListRowStyle.HEADER,
         )
 
-        when (data.size) {
-            0 -> Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) { content() }
-            else -> Column { content() }
+        if (data != null) {
+            when (data.size) {
+                0 -> Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) { content() }
+                else -> Column { content() }
+            }
         }
     }
 }
@@ -64,13 +66,13 @@ fun ListComponent(data: ArrayList<ListResponse>, columnModifier: Modifier) {
 @Composable
 fun ListComponentPreview() {
     val data = arrayListOf(
-        ListResponse(
+        ListItem(
             number = 12,
             material = "Ст_20_320",
             responsible = "Анатольев А. Н.",
             experimentType = "растяжение"
         ),
-        ListResponse(
+        ListItem(
             number = 12,
             material = "Ст_20_320",
             responsible = "Сидоров И. Б.",

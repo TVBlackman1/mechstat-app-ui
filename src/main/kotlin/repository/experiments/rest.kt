@@ -12,7 +12,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 class Experiments: ExperimentsRequester {
-    override suspend fun getExperiments(page: Int, limit: Int): ArrayList<ListResponse> = withContext(Dispatchers.IO){
+    override suspend fun getExperiments(page: Int, limit: Int): ListResponse = withContext(Dispatchers.IO){
         val client = HttpClient(CIO)
         client.use {
             val resp = it.get<HttpResponse> {
@@ -20,7 +20,7 @@ class Experiments: ExperimentsRequester {
                 parameter("page", page.toString())
                 parameter("limit", 16)
             }
-            Json.decodeFromString<ArrayList<ListResponse>>(resp.readText())
+            Json.decodeFromString<ListResponse>(resp.readText())
         }
     }
 }
