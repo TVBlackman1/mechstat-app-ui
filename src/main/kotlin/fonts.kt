@@ -10,3 +10,11 @@ val interFont400 = FontFamily(
         style = FontStyle.Normal
     )
 )
+
+val montserratFont400 = FontFamily(
+    Font(
+        resource = "fonts/Montserrat-Regular.ttf",
+        weight = FontWeight.W400,
+        style = FontStyle.Normal
+    )
+)
