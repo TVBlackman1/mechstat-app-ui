@@ -18,3 +18,19 @@ val montserratFont400 = FontFamily(
         style = FontStyle.Normal
     )
 )
+
+val montserratFont600 = FontFamily(
+    Font(
+        resource = "fonts/Montserrat-SemiBold.ttf",
+        weight = FontWeight.W600,
+        style = FontStyle.Normal
+    )
+)
+
+val montserratFont500 = FontFamily(
+    Font(
+        resource = "fonts/Montserrat-Medium.ttf",
+        weight = FontWeight.W500,
+        style = FontStyle.Normal
+    )
+)
