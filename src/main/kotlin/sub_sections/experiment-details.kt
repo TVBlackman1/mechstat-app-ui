@@ -1,5 +1,7 @@
 package sub_sections
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,6 +12,9 @@ import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,6 +24,7 @@ import internal.SubSection
 import montserratFont400
 import montserratFont500
 import montserratFont600
+import java.io.File
 
 @Composable
 fun ExperimentDetailsSubSection() {
@@ -46,7 +52,15 @@ fun ExperimentDetailsSubSection() {
                     .height(480.dp)
                     .background(Color(0xFFD2E9E9), RoundedCornerShape(6.dp))
                 ) {
-
+                    val file = File("C:\\Users\\vbifm\\IdeaProjects\\mechstat\\src\\main\\resources\\images\\chart-example.png")
+                    val imageBitmap: ImageBitmap = remember(file) {
+                        loadImageBitmap(file.inputStream())
+                    }
+                    Image(
+                        painter = BitmapPainter(image = imageBitmap),
+                        modifier = Modifier.fillMaxSize(),
+                        contentDescription = null
+                    )
                 }
             }
             Row (
@@ -107,6 +121,7 @@ fun ExperimentDetailsSubSection() {
     }
 }
 
+@Preview
 @Composable
 fun DetailsInfo() {
     val data = arrayOf(
@@ -151,8 +166,17 @@ fun DetailsInfo() {
         ),
     )
 
-    for (data in data) {
-        Group(data.name, data.subcategories)
+    Row (
+        modifier = Modifier.padding(start = 14.dp, end = 14.dp)
+    ) {
+        Column {
+            for (data in data) {
+                Row {
+                    Group(data.name, data.subcategories)
+
+                }
+            }
+        }
     }
 
 }
@@ -161,6 +185,7 @@ fun DetailsInfo() {
 fun Group(name: String, content: Array<DetailsSubcategory>) {
     Column {
         Text(name,
+            modifier = Modifier.padding(top = 8.dp, bottom = 5.dp),
             style = TextStyle(
                 color = Color(0xFF000000),
                 fontFamily = montserratFont600,
@@ -171,6 +196,7 @@ fun Group(name: String, content: Array<DetailsSubcategory>) {
         for (subcategory in content) {
             if (subcategory.name != null) {
                 Text(subcategory.name,
+                    modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
                     style = TextStyle(
                         color = Color(0xFF929292),
                         fontFamily = montserratFont500,
@@ -179,8 +205,9 @@ fun Group(name: String, content: Array<DetailsSubcategory>) {
                 )
             }
             for (detailsItem in subcategory.content){
-                Row {
+                Row (modifier = Modifier.padding(bottom = 3.dp)){
                     Text(detailsItem.name,
+                        modifier = Modifier.width(240.dp),
                         style = TextStyle(
                             color = Color(0xFF2C3E50),
                             fontFamily = montserratFont500,
