@@ -99,9 +99,9 @@ fun ListRow(
                 color = Color(color),
                 shape = shape
             )
-            .padding(5.dp),
+            .padding(4.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceAround,
+        horizontalArrangement = Arrangement.SpaceBetween,
     ){
         NumberListElement(number, style)
         MaterialListElement(material, style)
@@ -119,8 +119,8 @@ fun color(style: ListRowStyle): Long {
 
 fun Modifier.padding(style: ListRowStyle): Modifier {
     return when(style) {
-        ListRowStyle.HEADER -> this.height(36.dp).padding(4.dp)
-        ListRowStyle.BODY -> this.height(40.dp).padding(4.dp)
+        ListRowStyle.HEADER -> this.height(32.dp).padding(2.dp)
+        ListRowStyle.BODY -> this.height(36.dp).padding(3.dp)
     }
 }
 

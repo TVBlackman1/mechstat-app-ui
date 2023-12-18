@@ -12,7 +12,7 @@ fun ListContent(modifier: Modifier) {
 
     Row (modifier = modifier) {
         Section(Width(columnWidth)) {
-            ListSubSection(760)
+            ListSubSection(768)
             SubSection(MaxHeight()) {
                 Text("Other info")
             }

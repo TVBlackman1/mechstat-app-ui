@@ -19,11 +19,11 @@ fun ListElement(width: Dp, body: String, style: ListRowStyle) {
     )
 }
 
-val symbolSize = 10.dp
+val symbolSize = 8.dp
 
 object ListElementSizes {
     val Number = symbolSize*5
-    val Material = symbolSize*11
+    val Material = symbolSize*20
     val ExperimentType = symbolSize*13
     val Responsible = symbolSize*25
     fun summaryWidth(): Dp {
@@ -58,12 +58,12 @@ fun styleText(style: ListRowStyle): TextStyle {
         ListRowStyle.HEADER -> TextStyle(
             color = Color(0xFF2C3E50),
             fontFamily = interFont400,
-            fontSize = 14.sp,
+            fontSize = 12.sp,
         )
         ListRowStyle.BODY -> TextStyle(
             color = Color(0xFF2C3E50),
             fontFamily = interFont400,
-            fontSize = 15.sp,
+            fontSize = 14.sp,
         )
     }
 }

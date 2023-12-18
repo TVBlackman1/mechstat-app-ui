@@ -27,7 +27,7 @@ fun ListSubSection(height: Int) {
         mutableStateOf<ListResponse?>(null)
     }
     LaunchedEffect(page) {
-        experiments = repository.experiments.getExperiments(page, 16)
+        experiments = repository.experiments.getExperiments(page, 18)
     }
 
     SubSection(Height(height)) {
@@ -36,7 +36,7 @@ fun ListSubSection(height: Int) {
                 style = TextStyle(
                     color = Color(0xFF2C3E50),
                     fontFamily = montserratFont400,
-                    fontSize = 18.sp,
+                    fontSize = 16.sp,
                 ),
                 modifier = Modifier.padding(top=12.dp, bottom = 6.dp)
                 )

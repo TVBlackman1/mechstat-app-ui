@@ -32,6 +32,7 @@ fun SubSection(heightRule: SubSectionHeight, child: @Composable () -> Unit) {
             .fillMaxWidth()
             .padding(top = 2.dp, bottom = 2.dp)
             .background(Color.White, shape)
+            .padding(top = 3.dp, bottom = 3.dp, start = 4.dp, end = 4.dp)
         )
     ) { child() }
 }
