@@ -1,11 +1,15 @@
-package repository.experiments
+package repository.experiments.mock
 
 import repository.ExperimentsRequester
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import repository.experiments.dto.ExperimentDetailsResponse
+import repository.experiments.dto.ListItem
+import repository.experiments.dto.ListResponse
+import repository.experiments.dto.Meta
 import kotlin.math.ceil
 
-val experimentsMock = generateMockData()
+val experimentsMock = generateListElements()
 class ExperimentsMock: ExperimentsRequester {
     override suspend fun getExperiments(page: Int, limit: Int): ListResponse = withContext(Dispatchers.IO){
         val count = experimentsMock.size
@@ -31,20 +35,9 @@ class ExperimentsMock: ExperimentsRequester {
             )
         )
     }
-}
 
-fun generateMockData(): ArrayList<ListItem>{
-    val length = 50
-    val data = ArrayList<ListItem>(length)
-    for (i in 1..length) {
-        data.add(
-            ListItem(
-                number = i,
-                responsible = "Анатолий Н. П.",
-                experimentType = "Сжатие",
-                material = "Материал название",
-            )
-        )
+    override suspend fun getExperimentDetails(experimentId: Int): ExperimentDetailsResponse = withContext(Dispatchers.IO){
+        return@withContext generateDetails(experimentId)
+
     }
-    return data
 }

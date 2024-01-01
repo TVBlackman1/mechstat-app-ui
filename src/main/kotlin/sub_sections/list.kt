@@ -12,20 +12,24 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.WindowState
+import androidx.compose.ui.window.rememberWindowState
 import internal.Height
 import internal.SubSection
 import montserratFont400
-import repository.experiments.ListResponse
+import repository.experiments.dto.ListResponse
 import repository.repository
 
 @Composable
-fun ListSubSection(height: Int) {
+fun ListSubSection(height: Int, onChangeData: (dataId: Int) -> Unit) {
     var page by remember { mutableStateOf(1) }
     var experiments by remember {
         mutableStateOf<ListResponse?>(null)
     }
+    val windowState: WindowState = rememberWindowState(size = DpSize.Unspecified)
     LaunchedEffect(page) {
         experiments = repository.experiments.getExperiments(page, 18)
     }
@@ -40,7 +44,7 @@ fun ListSubSection(height: Int) {
                 ),
                 modifier = Modifier.padding(top=12.dp, bottom = 6.dp)
                 )
-            ListComponent(experiments?.data, Modifier.weight(1f))
+            ListComponent(experiments?.data, Modifier.weight(1f), onChangeData)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End,
@@ -48,6 +52,7 @@ fun ListSubSection(height: Int) {
                 IconButton(
                     content = { Icon(Icons.Default.KeyboardArrowLeft, "left") },
                     onClick = {
+                        println(windowState.size)
                         page--
                     },
                     enabled = page != 1

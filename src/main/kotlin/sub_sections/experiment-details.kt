@@ -5,30 +5,47 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.WindowState
+import androidx.compose.ui.window.rememberWindowState
 import internal.MaxHeight
 import internal.NoRippleTheme
 import internal.SubSection
 import montserratFont400
 import montserratFont500
 import montserratFont600
+import repository.experiments.dto.DetailsSubcategory
+import repository.experiments.dto.ExperimentDetailsResponse
+import repository.repository
 import java.io.File
 
 @Composable
-fun ExperimentDetailsSubSection() {
+fun ExperimentDetailsSubSection(experimentId: Int) {
     SubSection(MaxHeight()) {
+
+        var details by remember {
+            mutableStateOf<ExperimentDetailsResponse?>(null)
+        }
+        val windowState: WindowState = rememberWindowState(size = DpSize.Unspecified)
+        LaunchedEffect(experimentId) {
+            details = repository.experiments.getExperimentDetails(experimentId)
+        }
+
+        println(experimentId)
         Column {
             Row (
                 horizontalArrangement = Arrangement.Center,
@@ -38,29 +55,35 @@ fun ExperimentDetailsSubSection() {
                     style = TextStyle(
                         color = Color(0xFF2C3E50),
                         fontFamily = montserratFont400,
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                     ),
-                    modifier = Modifier.padding(6.dp)
+                    modifier = Modifier.padding(top=12.dp, bottom = 6.dp)
                 )
             }
             Row (
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Box(modifier = Modifier
-                    .width(984.dp)
-                    .height(480.dp)
-                    .background(Color(0xFFD2E9E9), RoundedCornerShape(6.dp))
-                ) {
-                    val file = File("C:\\Users\\vbifm\\IdeaProjects\\mechstat\\src\\main\\resources\\images\\chart-example.png")
-                    val imageBitmap: ImageBitmap = remember(file) {
-                        loadImageBitmap(file.inputStream())
+                Column(modifier = Modifier.width(820.dp).height(400.dp)) {
+                    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                        DropDownButton("Осцилограмма", listOf("Осцилограмма", "Другое"))
+                        DropDownButton("Загрузить", listOf("CSV", "PNG"))
                     }
-                    Image(
-                        painter = BitmapPainter(image = imageBitmap),
-                        modifier = Modifier.fillMaxSize(),
-                        contentDescription = null
-                    )
+                    Box(modifier = Modifier
+                        .background(Color(0xFFD2E9E9), RoundedCornerShape(6.dp))
+                    ) {
+                        val file = File("C:\\Users\\vbifm\\IdeaProjects\\mechstat\\src\\main\\resources\\images\\chart-example.png")
+                        val imageBitmap: ImageBitmap = remember(file) {
+                            loadImageBitmap(file.inputStream())
+                        }
+                        Column {
+                            Image(
+                                painter = BitmapPainter(image = imageBitmap),
+                                modifier = Modifier.fillMaxSize(),
+                                contentDescription = null
+                            )
+                        }
+                    }
                 }
             }
             Row (
@@ -110,7 +133,7 @@ fun ExperimentDetailsSubSection() {
                             }
                         }
                         when (tabIndex) {
-                            0 -> DetailsInfo()
+                            0 -> DetailsInfo(details)
                             1 -> Text("Связанные эксперименты")
                             2 -> Text("Информация о заказчике")
                         }
@@ -123,57 +146,17 @@ fun ExperimentDetailsSubSection() {
 
 @Preview
 @Composable
-fun DetailsInfo() {
-    val data = arrayOf(
-        DetailsCategory(
-            "Материал",
-            arrayOf(
-                DetailsSubcategory(
-                    null,
-                    arrayOf(
-                        DetailsItem("Название", "Композит Э-133-01-4026"),
-                        DetailsItem("Дата поступления", "5 апреля 2017"),
-                        DetailsItem("Партия", "Б-03-100-12"),
-                        DetailsItem("Завод", "Завод “Березка”"),
-                    ),
-                ),
-            ),
-        ),
-        DetailsCategory(
-            "Стержень",
-            arrayOf(
-                DetailsSubcategory(
-                    null,
-                    arrayOf(
-                        DetailsItem("Материал", "Береза"),
-                    )
-                ),
-                DetailsSubcategory(
-                    "Форма и размеры",
-                    arrayOf(
-                        DetailsItem("Размеры", "500мм x 0.5мм"),
-                        DetailsItem("Внутренний диаметр", "-"),
-                    )
-                ),
-                DetailsSubcategory(
-                    "Физические характеристики",
-                    arrayOf(
-                        DetailsItem("Модуль упругости", "71000 МПа"),
-                        DetailsItem("Скорость звука", "5050 м/с"),
-                    )
-                ),
-            ),
-        ),
-    )
-
+fun DetailsInfo(data: ExperimentDetailsResponse?) {
+    if (data == null) {
+        return
+    }
     Row (
         modifier = Modifier.padding(start = 14.dp, end = 14.dp)
     ) {
         Column {
-            for (data in data) {
+            for (data in data.data) {
                 Row {
                     Group(data.name, data.subcategories)
-
                 }
             }
         }
@@ -189,7 +172,7 @@ fun Group(name: String, content: Array<DetailsSubcategory>) {
             style = TextStyle(
                 color = Color(0xFF000000),
                 fontFamily = montserratFont600,
-                fontSize = 18.sp,
+                fontSize = 16.sp,
             ),
         )
 
@@ -200,25 +183,25 @@ fun Group(name: String, content: Array<DetailsSubcategory>) {
                     style = TextStyle(
                         color = Color(0xFF929292),
                         fontFamily = montserratFont500,
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                     ),
                 )
             }
             for (detailsItem in subcategory.content){
                 Row (modifier = Modifier.padding(bottom = 3.dp)){
                     Text(detailsItem.name,
-                        modifier = Modifier.width(240.dp),
+                        modifier = Modifier.width(250.dp),
                         style = TextStyle(
                             color = Color(0xFF2C3E50),
                             fontFamily = montserratFont500,
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                         ),
                     )
                     Text(detailsItem.value,
                         style = TextStyle(
                             color = Color(0xFF2C3E50),
                             fontFamily = montserratFont400,
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                         ),
                     )
                 }
@@ -227,16 +210,38 @@ fun Group(name: String, content: Array<DetailsSubcategory>) {
     }
 }
 
-class DetailsCategory(
-    val name: String,
-    val subcategories: Array<DetailsSubcategory>,
-)
-
-class DetailsSubcategory(
-    val name: String?,
-    val content: Array<DetailsItem>,
-)
-data class DetailsItem(
-    val name: String,
-    val value: String,
-)
+@Composable
+fun DropDownButton(text: String, variants: List<String>) {
+    Column {
+        var expanded by remember { mutableStateOf(false) }
+        Button(
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFF1F8F8), contentColor = Color(0xFF2C3E50)),
+            onClick = {expanded = !expanded},
+            modifier = Modifier.width(190.dp)
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Text(text, style = TextStyle(
+                    fontFamily = montserratFont400,
+                    fontSize = 16.sp,
+                ))
+                Icon(Icons.Default.ArrowDropDown, "показать варианты")
+            }
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false}
+        ) {
+            for (variant in variants) {
+                DropdownMenuItem(
+                    onClick = {}
+                ){
+                    Text(variant)
+                }
+            }
+        }
+    }
+}

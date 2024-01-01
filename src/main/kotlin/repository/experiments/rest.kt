@@ -10,6 +10,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import repository.experiments.dto.ExperimentDetailsResponse
+import repository.experiments.dto.ListItem
+import repository.experiments.dto.ListResponse
+import repository.experiments.dto.Meta
+import kotlin.math.ceil
 
 class Experiments: ExperimentsRequester {
     override suspend fun getExperiments(page: Int, limit: Int): ListResponse = withContext(Dispatchers.IO){
@@ -22,5 +27,9 @@ class Experiments: ExperimentsRequester {
             }
             Json.decodeFromString<ListResponse>(resp.readText())
         }
+    }
+
+    override suspend fun getExperimentDetails(experimentId: Int): ExperimentDetailsResponse {
+        TODO("Not yet implemented")
     }
 }

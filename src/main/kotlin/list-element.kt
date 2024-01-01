@@ -60,7 +60,7 @@ fun styleText(style: ListRowStyle): TextStyle {
             fontFamily = interFont400,
             fontSize = 12.sp,
         )
-        ListRowStyle.BODY -> TextStyle(
+        ListRowStyle.BODY, ListRowStyle.SELECTED_BODY -> TextStyle(
             color = Color(0xFF2C3E50),
             fontFamily = interFont400,
             fontSize = 14.sp,

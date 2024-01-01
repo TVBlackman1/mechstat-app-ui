@@ -1,4 +1,4 @@
-package repository.experiments
+package repository.experiments.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

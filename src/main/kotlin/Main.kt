@@ -9,8 +9,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.WindowSize
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import java.awt.Dimension
 
 
 @Composable
@@ -41,12 +43,19 @@ fun App() {
 }
 
 fun main() = application {
-    val windowState = rememberWindowState(size = DpSize.Unspecified)
+    val windowState = rememberWindowState(size = DpSize(1618.dp, 980.dp))
     Window(
         onCloseRequest = ::exitApplication, windowState,
         title = "Mechstat",
-        icon = painterResource("images/icon.png")
+        icon = painterResource("images/icon.png"),
+        onKeyEvent = {
+            return@Window false
+        },
+
     ) {
+        window.size = Dimension()
+//        windowState.size
         App()
+
     }
 }
