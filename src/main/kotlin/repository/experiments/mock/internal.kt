@@ -25,7 +25,9 @@ object DetailCategoryName {
 
 fun generateDetails(experimentId: Int): ExperimentDetailsResponse {
     return ExperimentDetailsResponse(
-        data = arrayOf(
+        id = experimentId,
+        date = "5 марта 2022 17:52",
+        properties = arrayOf(
             generateMaterialDetails(experimentId),
             generateRodDetails()
         )

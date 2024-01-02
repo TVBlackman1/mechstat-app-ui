@@ -4,7 +4,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class ExperimentDetailsResponse(
-    val data: Array<DetailsCategory>
+    val id: Int,
+    val date: String,
+    val properties: Array<DetailsCategory>
 )
 
 @Serializable

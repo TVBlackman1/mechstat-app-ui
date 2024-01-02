@@ -17,11 +17,8 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.WindowState
-import androidx.compose.ui.window.rememberWindowState
 import internal.MaxHeight
 import internal.NoRippleTheme
 import internal.SubSection
@@ -40,121 +37,146 @@ fun ExperimentDetailsSubSection(experimentId: Int) {
         var details by remember {
             mutableStateOf<ExperimentDetailsResponse?>(null)
         }
-        val windowState: WindowState = rememberWindowState(size = DpSize.Unspecified)
         LaunchedEffect(experimentId) {
             details = repository.experiments.getExperimentDetails(experimentId)
         }
-
-        println(experimentId)
-        Column {
-            Row (
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
-            ){
-                Text("5 марта 2022 17:52",
-                    style = TextStyle(
-                        color = Color(0xFF2C3E50),
-                        fontFamily = montserratFont400,
-                        fontSize = 16.sp,
-                    ),
-                    modifier = Modifier.padding(top=12.dp, bottom = 6.dp)
+        details?.let {
+            Column {
+                DetailsHeader(details!!.date)
+                ChartPart()
+                TabView(
+                    TabGroup("Основное") { DetailsInfo(details!!) },
+                    TabGroup("Связанное") { Text("Связанные эксперименты") },
+                    TabGroup("Заказчик") { Text("Информация о заказчике") },
                 )
             }
-            Row (
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(modifier = Modifier.width(820.dp).height(400.dp)) {
-                    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                        DropDownButton("Осцилограмма", listOf("Осцилограмма", "Другое"))
-                        DropDownButton("Загрузить", listOf("CSV", "PNG"))
-                    }
-                    Box(modifier = Modifier
-                        .background(Color(0xFFD2E9E9), RoundedCornerShape(6.dp))
-                    ) {
-                        val file = File("C:\\Users\\vbifm\\IdeaProjects\\mechstat\\src\\main\\resources\\images\\chart-example.png")
-                        val imageBitmap: ImageBitmap = remember(file) {
-                            loadImageBitmap(file.inputStream())
-                        }
-                        Column {
-                            Image(
-                                painter = BitmapPainter(image = imageBitmap),
-                                modifier = Modifier.fillMaxSize(),
-                                contentDescription = null
-                            )
-                        }
-                    }
-                }
+        }
+    }
+}
+
+@Composable
+fun DetailsHeader(header: String) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            header,
+            style = TextStyle(
+                color = Color(0xFF2C3E50),
+                fontFamily = montserratFont400,
+                fontSize = 16.sp,
+            ),
+            modifier = Modifier.padding(top = 12.dp, bottom = 6.dp)
+        )
+    }
+}
+@Composable
+fun ChartPart() {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(modifier = Modifier.width(820.dp).height(400.dp)) {
+            Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                DropDownButton("Осцилограмма", listOf("Осцилограмма", "Другое"))
+                DropDownButton("Загрузить", listOf("CSV", "PNG"))
             }
-            Row (
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
+            Box(
+                modifier = Modifier
+                    .background(Color(0xFFD2E9E9), RoundedCornerShape(6.dp))
             ) {
-                Box(modifier = Modifier
-                    .width(984.dp)
-                    .height(480.dp)
-                    .padding(top = 6.dp)
-                    .background(Color(0xFFF9F9F9), RoundedCornerShape(4.dp))
-                ) {
-                    var tabIndex by remember { mutableStateOf(0) }
-
-                    val tabs = listOf("Основное", "Связанное", "Заказчик")
-
-                    Column(modifier = Modifier.fillMaxWidth()) {
-                        Row (
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
-                                TabRow(
-                                    selectedTabIndex = tabIndex,
-                                    backgroundColor  = Color.Transparent,
-                                    modifier = Modifier.width(600.dp),
-                                    indicator = {},
-                                    divider = {},
-                                ) {
-                                    tabs.forEachIndexed { index, title ->
-                                        Tab(text = { Text(
-                                            title,
-                                            style = TextStyle(
-                                                color = if (tabIndex == index) Color(0xFF000000) else Color(0xFFA7A7A7),
-                                                fontFamily = montserratFont600,
-                                                fontSize = 14.sp,
-                                            ),
-                                        ) },
-                                            modifier = Modifier
-                                                .padding(start = 10.dp, end = 10.dp, top = 6.dp, bottom = 6.dp)
-                                                .background(Color.Transparent),
-                                            selected = tabIndex == index,
-                                            onClick = { tabIndex = index },
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                        when (tabIndex) {
-                            0 -> DetailsInfo(details)
-                            1 -> Text("Связанные эксперименты")
-                            2 -> Text("Информация о заказчике")
-                        }
-                    }
+                val file =
+                    File("C:\\Users\\vbifm\\IdeaProjects\\mechstat\\src\\main\\resources\\images\\chart-example.png")
+                val imageBitmap: ImageBitmap = remember(file) {
+                    loadImageBitmap(file.inputStream())
+                }
+                Column {
+                    Image(
+                        painter = BitmapPainter(image = imageBitmap),
+                        modifier = Modifier.fillMaxSize(),
+                        contentDescription = null
+                    )
                 }
             }
         }
     }
 }
 
+@Composable
+fun TabView(vararg tabs: TabGroup) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Box(
+            modifier = Modifier
+                .width(984.dp)
+                .height(480.dp)
+                .padding(top = 6.dp)
+                .background(Color(0xFFF9F9F9), RoundedCornerShape(4.dp))
+        ) {
+            var tabIndex by remember { mutableStateOf(0) }
+
+            val tabNames = tabs.map { tab -> tab.name }
+
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
+                        TabRow(
+                            selectedTabIndex = tabIndex,
+                            backgroundColor = Color.Transparent,
+                            modifier = Modifier.width(600.dp),
+                            indicator = {},
+                            divider = {},
+                        ) {
+                            tabNames.forEachIndexed { index, title ->
+                                Tab(
+                                    text = {
+                                        Text(
+                                            title,
+                                            style = TextStyle(
+                                                color = if (tabIndex == index) Color(0xFF000000) else Color(0xFFA7A7A7),
+                                                fontFamily = montserratFont600,
+                                                fontSize = 14.sp,
+                                            ),
+                                        )
+                                    },
+                                    modifier = Modifier
+                                        .padding(start = 10.dp, end = 10.dp, top = 6.dp, bottom = 6.dp)
+                                        .background(Color.Transparent),
+                                    selected = tabIndex == index,
+                                    onClick = { tabIndex = index },
+                                )
+                            }
+                        }
+                    }
+                }
+                tabs[tabIndex].view()
+            }
+        }
+    }
+}
+
+class TabGroup(
+    val name: String,
+    val view: @Composable () -> Unit
+)
+
 @Preview
 @Composable
-fun DetailsInfo(data: ExperimentDetailsResponse?) {
+fun DetailsInfo(data: ExperimentDetailsResponse) {
     if (data == null) {
         return
     }
-    Row (
+    Row(
         modifier = Modifier.padding(start = 14.dp, end = 14.dp)
     ) {
         Column {
-            for (data in data.data) {
+            for (data in data.properties) {
                 Row {
                     Group(data.name, data.subcategories)
                 }
@@ -167,7 +189,8 @@ fun DetailsInfo(data: ExperimentDetailsResponse?) {
 @Composable
 fun Group(name: String, content: Array<DetailsSubcategory>) {
     Column {
-        Text(name,
+        Text(
+            name,
             modifier = Modifier.padding(top = 8.dp, bottom = 5.dp),
             style = TextStyle(
                 color = Color(0xFF000000),
@@ -178,7 +201,8 @@ fun Group(name: String, content: Array<DetailsSubcategory>) {
 
         for (subcategory in content) {
             if (subcategory.name != null) {
-                Text(subcategory.name,
+                Text(
+                    subcategory.name,
                     modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
                     style = TextStyle(
                         color = Color(0xFF929292),
@@ -187,9 +211,10 @@ fun Group(name: String, content: Array<DetailsSubcategory>) {
                     ),
                 )
             }
-            for (detailsItem in subcategory.content){
-                Row (modifier = Modifier.padding(bottom = 3.dp)){
-                    Text(detailsItem.name,
+            for (detailsItem in subcategory.content) {
+                Row(modifier = Modifier.padding(bottom = 3.dp)) {
+                    Text(
+                        detailsItem.name,
                         modifier = Modifier.width(250.dp),
                         style = TextStyle(
                             color = Color(0xFF2C3E50),
@@ -197,7 +222,8 @@ fun Group(name: String, content: Array<DetailsSubcategory>) {
                             fontSize = 16.sp,
                         ),
                     )
-                    Text(detailsItem.value,
+                    Text(
+                        detailsItem.value,
                         style = TextStyle(
                             color = Color(0xFF2C3E50),
                             fontFamily = montserratFont400,
@@ -216,29 +242,31 @@ fun DropDownButton(text: String, variants: List<String>) {
         var expanded by remember { mutableStateOf(false) }
         Button(
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFF1F8F8), contentColor = Color(0xFF2C3E50)),
-            onClick = {expanded = !expanded},
+            onClick = { expanded = !expanded },
             modifier = Modifier.width(190.dp)
         ) {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
-            ){
-                Text(text, style = TextStyle(
-                    fontFamily = montserratFont400,
-                    fontSize = 16.sp,
-                ))
+            ) {
+                Text(
+                    text, style = TextStyle(
+                        fontFamily = montserratFont400,
+                        fontSize = 16.sp,
+                    )
+                )
                 Icon(Icons.Default.ArrowDropDown, "показать варианты")
             }
         }
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false}
+            onDismissRequest = { expanded = false }
         ) {
             for (variant in variants) {
                 DropdownMenuItem(
                     onClick = {}
-                ){
+                ) {
                     Text(variant)
                 }
             }
